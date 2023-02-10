@@ -38,10 +38,6 @@ main:
 	$(CC)  main.cc -o main
 	./main
 
-push:
-	git add -A
-	git commit -m $(PUSHCOMMENT)
-	git push origin develop
 
 leaks: $(LIB)
 	$(CC) $(LIB) $(TESTF) $(LIBCHECK) -o leaks
