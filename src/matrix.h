@@ -17,6 +17,7 @@ class Matrix {
     Matrix(int rows, int columns);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
+    Matrix(std::string filename);
     ~Matrix();
 
     //  Methods
@@ -34,6 +35,7 @@ class Matrix {
     Matrix calc_complements();
     Matrix inverse_matrix();
     double determinant();
+    bool isSquare();
 
     //  operators
 

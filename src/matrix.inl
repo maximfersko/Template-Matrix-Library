@@ -21,10 +21,20 @@ Matrix<T>::Matrix(const Matrix& other)
 }
 
 template <class T>
+Matrix<T>::Matrix(std::string filename) {
+    initMatrix(filename);
+}
+
+template <class T>
 Matrix<T>::Matrix(Matrix&& other) : _rows(0), _cols(0), _matrix(nullptr) {
     std::swap(_rows, other._rows);
     std::swap(_cols, other._cols);
     std::swap(_matrix, other._matrix);
+}
+
+template <class T>
+bool Matrix<T>::isSquare() {
+    return _rows == _cols;
 }
 
 template <class T>
@@ -86,13 +96,13 @@ template <class T>
 void Matrix<T>::freeMatrix() {
     if (_matrix) {
         for (int i = 0; i < _rows; i++) {
-            delete[] _matrix[i];
+            if (_matrix[i]) delete[] _matrix[i];
         }
         delete[] _matrix;
         _matrix = nullptr;
-        _rows = 0;
-        _cols = 0;
     }
+    _rows = 0;
+    _cols = 0;
 }
 
 template <class T>
@@ -246,15 +256,21 @@ Matrix<T> Matrix<T>::calc_complements() {
 
 template <class T>
 Matrix<T> Matrix<T>::inverse_matrix() {
-    if (_cols != _rows || std::isnan(determinant()) || determinant() == 0 ||
+    double det = determinant();
+    if (_cols != _rows || std::isnan(det) || det == 0 ||
         !this->validate()) {
         throw std::out_of_range("Error ! The determinant of the matrix is 0");
+    } 
+    Matrix result = Matrix(_rows, _cols);
+    if (_rows == 1) {
+        result._matrix[0][0] = 1 / det;
     } else {
-        Matrix minor = calc_complements();
-        Matrix transpose = minor.transpose();
-        transpose.mul_number(1 / determinant());
-        return transpose;
+        Matrix complements = calc_complements();
+        Matrix transpose = complements.transpose();
+        transpose.mul_number(1 / det);
+        result = transpose;
     }
+    return result;
 }
 
 
