@@ -26,10 +26,11 @@ Matrix<T>::Matrix(std::string filename) {
 }
 
 template <class T>
-Matrix<T>::Matrix(Matrix&& other) : _rows(0), _cols(0), _matrix(nullptr) {
-    std::swap(_rows, other._rows);
-    std::swap(_cols, other._cols);
-    std::swap(_matrix, other._matrix);
+Matrix<T>::Matrix(Matrix&& other) : 
+    _matrix(other._matrix),
+    _cols(other.getColumn()),
+    _rows(other.getRows()) {
+   other._matrix = nullptr;
 }
 
 template <class T>
@@ -86,7 +87,7 @@ void Matrix<T>::setColumn(int columns) {
 
 template <class T>
 void Matrix<T>::createMatrix() {
-    _matrix = new T*[_rows];
+    _matrix = new T*[_rows]{};
     for (int i = 0; i < _rows; i++) {
         _matrix[i] = new T[_cols]{};
     }
@@ -112,10 +113,9 @@ bool Matrix<T>::eq_matrix(const Matrix& other) {
         !other.validate()) {
         result = false;
     } else {
-        double equal;
         for (int i = 0; i < _rows; i++) {
             for (int j = 0; j < _cols; j++) {
-                equal = std::fabs(_matrix[i][j] - other._matrix[i][j]);
+                double equal = std::fabs(_matrix[i][j] - other._matrix[i][j]);
                 if (equal > 1E-7) {
                     result = false;
                     break;
