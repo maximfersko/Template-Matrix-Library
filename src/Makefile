@@ -1,6 +1,6 @@
 OBJ            =     matrix.o
 SRCTEST        =     test.cc
-CC             =     g++ -std=c++17
+CC             =     clang++ -std=c++17
 LIBCHECK       =     -lgtest
 TESTF          =     test.cc
 TESTDIRECTORY  =     test

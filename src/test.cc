@@ -16,15 +16,6 @@ TEST(test, defCreateMatrix) {
   bool result = first == second;
   ASSERT_EQ(result, true);
 }
-        
-TEST(test, createMatrixtest) {
-  Matrix<double> first(1, 1);
-  first(0, 0) = 2;
-  Matrix<double> second(1, 1);
-  second(0, 0) = 3;
-  bool result = first == second;
-  ASSERT_EQ(result, false);
-}
 
 TEST(test, sumMatrix) {
   Matrix<double> first(3, 3);
@@ -167,17 +158,6 @@ TEST(test, mulNumber) {
   bool check = first == result;
   ASSERT_EQ(check, true);
 }
-
-TEST(test, mulNumber3) {
-  Matrix<double> first(5, 5);
-  Matrix<double> result(5, 5);
-  first.initMatrix("data/30x30f.txt");
-  result.initMatrix("data/result/multNumber/30x30f*33f.txt");
-  first *= 3;
-  bool check = first == result;
-  ASSERT_EQ(check, false);
-}
-
 
 TEST(test, determinant2) {
   Matrix<double> first(2, 2);

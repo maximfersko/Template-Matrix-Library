@@ -113,13 +113,10 @@ bool Matrix<T>::eq_matrix(const Matrix& other) {
         !other.validate()) {
         result = false;
     } else {
-        for (int i = 0; i < _rows; i++) {
-            for (int j = 0; j < _cols; j++) {
+        for (int i = 0; i < _rows || !result; i++) {
+            for (int j = 0; j < _cols || !result; j++) {
                 double equal = std::fabs(_matrix[i][j] - other._matrix[i][j]);
-                if (equal > 1E-7) {
-                    result = false;
-                    break;
-                }
+                if (equal > 1E-7) result = false;
             }
             if (!result) break;
         }
