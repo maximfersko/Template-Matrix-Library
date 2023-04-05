@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "matrix.h"
+#include "matrix/matrix.h"
 
 
 TEST(test, defCreateMatrix) {

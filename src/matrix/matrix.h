@@ -17,7 +17,7 @@ class Matrix {
     Matrix(int rows, int columns);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
-    Matrix(std::string filename);
+    explicit Matrix(const std::string filename);
     ~Matrix();
 
     //  Methods
@@ -51,13 +51,13 @@ class Matrix {
     Matrix& operator*=(const double number);
     bool operator==(const Matrix& other);
 
-    // utilities 
+    // utilities
     void initMatrix(std::string path);
     void print();
 
    private:
     // Attributes
-    int _rows {}, _cols{};  // Rows and columns
+    int _rows{}, _cols{};  // Rows and columns
     T** _matrix{};  // Pointer to the memory where the matrix is allocated
 
     Matrix cutMatrix(int rows, int columns);

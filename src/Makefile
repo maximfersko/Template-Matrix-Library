@@ -9,6 +9,8 @@ EXETEST        =     test
 O              =     leaks
 clean          =     clean
 OS             =     $(shell uname -s)
+CFLAGS = -Wall -Werror -Wextra
+CPPCHECKFLAGS = --enable=all --language=c++ --std=c++17 --suppress=missingIncludeSystem --suppress=unusedFunction --suppress=missingInclude --suppress=unusedStructMember --suppress=unmatchedSuppression
 
 .PHONY:
 	clean rebuild test leaks all default
@@ -48,12 +50,18 @@ valgrind:
 	valgrind -s --tool=memcheck --trace-children=yes --leak-check=full --show-leak-kinds=all ./valgrind
 
 test: $(clean)
-	$(CC) --coverage $(SRCTEST) -o $(EXETEST) $(LIBCHECK)
+	$(CC) --coverage $(SRCTEST) -o $(EXETEST) $(LIBCHECK) 
 	./$(EXETEST)
 
 memory: $(clean) $(O)
 
 debug:
 	$(CC) -g $(SRC) test.cpp -o debug.out
+
+cppcheck:
+	cppcheck $(CPPCHECKFLAGS) matrix/*
+
+lint:
+	@clang-format -i --verbose matrix/*
 
 rebuild: clean all
