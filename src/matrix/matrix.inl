@@ -21,6 +21,19 @@ Matrix<T>::Matrix(const Matrix& other)
 }
 
 template <class T>
+Matrix<T>::Matrix(std::initializer_list<T> const& items) {
+    rows_ = cols_ = sqrt(items.size());
+    createMatrix();
+    auto iterator = items.begin();
+    for (int i = 0; i < rows_; ++i) {
+        for (int j = 0; j < cols_; ++j) {
+            matrix_[i][j] = *iterator;
+            iterator++;
+        }
+    }
+}
+
+template <class T>
 Matrix<T>::Matrix(const std::string filename) {
     initMatrix(filename);
 }

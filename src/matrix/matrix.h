@@ -18,6 +18,7 @@ class Matrix {
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     explicit Matrix(const std::string filename);
+    explicit Matrix(std::initializer_list<T> const& items);
     ~Matrix();
 
     //  Methods
