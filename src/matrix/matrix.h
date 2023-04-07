@@ -27,14 +27,14 @@ class Matrix {
     int getColumn() const;
     void setRows(int rows);
     void setColumn(int columns);
-    bool eq_matrix(const Matrix& other);
-    void sum_matrix(const Matrix& other);
-    void sub_matrix(const Matrix& other);
+    bool matrix_eq(const Matrix& other);
+    void matrix_sum(const Matrix& other);
+    void matrix_sub(const Matrix& other);
     void mul_number(const double num);
-    void mul_matrix(const Matrix& other);
+    void matrix_mul(const Matrix& other);
     Matrix transpose();
     Matrix calc_complements();
-    Matrix inverse_matrix();
+    Matrix inversematrix_();
     double determinant();
     bool isSquare();
 
@@ -58,8 +58,8 @@ class Matrix {
 
    private:
     // Attributes
-    int _rows{}, _cols{};  // Rows and columns
-    T** _matrix{};  // Pointer to the memory where the matrix is allocated
+    int rows_{}, cols_{};  // Rows and columns
+    T** matrix_{};  // Pointer to the memory where the matrix is allocated
 
     Matrix cutMatrix(int rows, int columns);
     bool validate() const;
