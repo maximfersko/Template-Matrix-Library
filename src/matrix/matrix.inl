@@ -6,7 +6,8 @@ Matrix<T>::Matrix() : rows_(2), cols_(2) {
 }
 
 template <class T>
-Matrix<T>::Matrix(std::size_t rows, std::size_t columns) : rows_(rows), cols_(columns) {
+Matrix<T>::Matrix(std::size_t rows, std::size_t columns)
+    : rows_(rows), cols_(columns) {
     if (rows <= 0 || columns <= 0) throw std::out_of_range("Invalid values");
     AllocateMatrix();
 }
@@ -40,7 +41,9 @@ Matrix<T>::Matrix(const std::string filename) {
 
 template <class T>
 Matrix<T>::Matrix(Matrix&& other)
-    : matrix_(other.matrix_), cols_(other.GetColumns()), rows_(other.GetRows()) {
+    : matrix_(other.matrix_),
+      cols_(other.GetColumns()),
+      rows_(other.GetRows()) {
     other.matrix_ = nullptr;
 }
 
@@ -98,7 +101,7 @@ void Matrix<T>::SetColumns(std::size_t columns) {
 
 template <class T>
 void Matrix<T>::AllocateMatrix() {
-    matrix_ = new T* [rows_]{};
+    matrix_ = new T* [rows_] {};
     for (std::size_t i = 0; i < rows_; i++) matrix_[i] = new T[cols_]{};
 }
 
@@ -166,7 +169,8 @@ void Matrix<T>::MulNumber(const double num) {
 
 template <class T>
 void Matrix<T>::MulMatrix(const Matrix& other) {
-    if (this->rows_ != other.cols_ || !this->IsValidate() || !other.IsValidate())
+    if (this->rows_ != other.cols_ || !this->IsValidate() ||
+        !other.IsValidate())
         throw std::out_of_range("Error ! Invalid values");
     Matrix tmp(rows_, other.cols_);
     for (std::size_t i = 0; i < rows_; i++) {
@@ -392,7 +396,8 @@ template <class T>
 void Matrix<T>::Print() {
     std::cout << std::endl;
     for (std::size_t i = 0; i < rows_; ++i) {
-        for (std::size_t j = 0; j < cols_; ++j) std::cout << matrix_[i][j] << " ";
+        for (std::size_t j = 0; j < cols_; ++j)
+            std::cout << matrix_[i][j] << " ";
         std::cout << std::endl;
     }
 }
