@@ -271,27 +271,27 @@ T& Matrix<T>::operator()(int rows, int column) {
 template <class T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) {
     Matrix result(*this);
-    result.summatrix_(other);
+    result.SumMatrix(other);
     return result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator-(const Matrix<T>& other) {
     Matrix result(*this);
-    result.submatrix_(other);
+    result.SubMatrix(other);
     return result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) {
     Matrix result(*this);
-    result.mulmatrix_(other);
+    result.MulMatrix(other);
     return result;
 }
 
 template <class T>
 bool Matrix<T>::operator==(const Matrix<T>& other) {
-    return eqmatrix_(other);
+    return IsEqualMatrix(other);
 }
 
 template <class T>
@@ -325,19 +325,19 @@ Matrix<T>& Matrix<T>::operator=(Matrix<T>&& other) {
 
 template <class T>
 Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
-    summatrix_(other);
+    SumMatrix(other);
     return *this;
 }
 
 template <class T>
 Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
-    submatrix_(other);
+    SubMatrix(other);
     return *this;
 }
 
 template <class T>
 Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
-    mulmatrix_(other);
+    MulMatrix(other);
     return *this;
 }
 
