@@ -2,20 +2,20 @@
 
 template <class T>
 Matrix<T>::Matrix() : rows_(2), cols_(2) {
-    Allocate();
+    AllocateMatrix();
 }
 
 template <class T>
 Matrix<T>::Matrix(std::size_t rows, std::size_t columns) : rows_(rows), cols_(columns) {
     if (rows <= 0 || columns <= 0) throw std::out_of_range("Invalid values");
-    Allocate();
+    AllocateMatrix();
 }
 
 template <class T>
 Matrix<T>::Matrix(const Matrix& other)
     : rows_(other.rows_), cols_(other.cols_) {
     if (this != &other) {
-        Allocate();
+        AllocateMatrix();
         *this = other;
     }
 }
@@ -23,7 +23,7 @@ Matrix<T>::Matrix(const Matrix& other)
 template <class T>
 Matrix<T>::Matrix(std::initializer_list<T> const& items) {
     rows_ = cols_ = sqrt(items.size());
-    Allocate();
+    AllocateMatrix();
     auto iterator = items.begin();
     for (std::size_t i = 0; i < rows_; ++i) {
         for (std::size_t j = 0; j < cols_; ++j) {
@@ -51,7 +51,7 @@ bool Matrix<T>::IsSquare() {
 
 template <class T>
 Matrix<T>::~Matrix() {
-    Destroy();
+    DestroyMatrix();
 }
 
 template <class T>
@@ -97,13 +97,13 @@ void Matrix<T>::SetColumns(std::size_t columns) {
 }
 
 template <class T>
-void Matrix<T>::Allocate() {
+void Matrix<T>::AllocateMatrix() {
     matrix_ = new T* [rows_]{};
     for (std::size_t i = 0; i < rows_; i++) matrix_[i] = new T[cols_]{};
 }
 
 template <class T>
-void Matrix<T>::Destroy() {
+void Matrix<T>::DestroyMatrix() {
     if (matrix_) {
         for (std::size_t i = 0; i < rows_; i++)
             if (matrix_[i]) delete[] matrix_[i];
@@ -297,10 +297,10 @@ bool Matrix<T>::operator==(const Matrix<T>& other) {
 template <class T>
 Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
     if (this != &other) {
-        Destroy();
+        DestroyMatrix();
         rows_ = other.rows_;
         cols_ = other.cols_;
-        Allocate();
+        AllocateMatrix();
     }
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -313,7 +313,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
 template <class T>
 Matrix<T>& Matrix<T>::operator=(Matrix<T>&& other) {
     if (this != &other) {
-        Destroy();
+        DestroyMatrix();
         rows_ = other.rows_;
         cols_ = other.cols_;
         matrix_ = other.matrix_;

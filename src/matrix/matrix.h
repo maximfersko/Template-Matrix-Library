@@ -59,12 +59,12 @@ class Matrix {
    private:
     // Attributes
     std::size_t rows_{}, cols_{};  // Rows and columns
-    T** matrix_{};  // Pointer to the memory where the matrix is allocated
+    T** matrix_{};  // Pointer to the memory where the matrix is AllocateMatrixd
 
     Matrix CutMatrix(std::size_t rows, std::size_t columns);
     bool IsValidate() const;
-    void Allocate();
-    void Destroy();
+    void AllocateMatrix();
+    void DestroyMatrix();
 };
 #include "matrix.inl"
 #endif  // MATRIX_H_

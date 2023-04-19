@@ -2,7 +2,7 @@
 #include "matrix/matrix.h"
 
 
-TEST(test, defAllocate) {
+TEST(test, defAllocateMatrix) {
   Matrix<double> first;
   first(0, 0) = 2;
   first(0, 1) = 3;
