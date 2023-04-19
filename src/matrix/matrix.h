@@ -14,7 +14,7 @@ class Matrix {
     //  Constructor & Destructor
 
     Matrix();
-    Matrix(int rows, int columns);
+    Matrix(std::size_t rows, std::size_t columns);
     Matrix(const Matrix& other);
     Matrix(Matrix&& other);
     explicit Matrix(const std::string filename);
@@ -25,8 +25,8 @@ class Matrix {
 
     int GetRows() const;
     int GetColumns() const;
-    void SetRows(int rows);
-    void SetColumns(int columns);
+    void SetRows(std::size_t rows);
+    void SetColumns(std::size_t columns);
     bool IsEqualMatrix(const Matrix& other);
     void SumMatrix(const Matrix& other);
     void SubMatrix(const Matrix& other);
@@ -40,7 +40,7 @@ class Matrix {
 
     //  operators
 
-    T& operator()(int rows, int column);
+    T& operator()(std::size_t rows, std::size_t column);
     Matrix operator+(const Matrix& other);
     Matrix operator-(const Matrix& other);
     Matrix operator*(const Matrix& other);
@@ -58,10 +58,10 @@ class Matrix {
 
    private:
     // Attributes
-    int rows_{}, cols_{};  // Rows and columns
+    std::size_t rows_{}, cols_{};  // Rows and columns
     T** matrix_{};  // Pointer to the memory where the matrix is allocated
 
-    Matrix CutMatrix(int rows, int columns);
+    Matrix CutMatrix(std::size_t rows, std::size_t columns);
     bool IsValidate() const;
     void Allocate();
     void Destroy();
