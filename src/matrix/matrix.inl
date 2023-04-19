@@ -2,20 +2,20 @@
 
 template <class T>
 Matrix<T>::Matrix() : rows_(2), cols_(2) {
-    createMatrix();
+    Allocate();
 }
 
 template <class T>
 Matrix<T>::Matrix(int rows, int columns) : rows_(rows), cols_(columns) {
     if (rows <= 0 || columns <= 0) throw std::out_of_range("Invalid values");
-    createMatrix();
+    Allocate();
 }
 
 template <class T>
 Matrix<T>::Matrix(const Matrix& other)
     : rows_(other.rows_), cols_(other.cols_) {
     if (this != &other) {
-        createMatrix();
+        Allocate();
         *this = other;
     }
 }
@@ -23,7 +23,7 @@ Matrix<T>::Matrix(const Matrix& other)
 template <class T>
 Matrix<T>::Matrix(std::initializer_list<T> const& items) {
     rows_ = cols_ = sqrt(items.size());
-    createMatrix();
+    Allocate();
     auto iterator = items.begin();
     for (int i = 0; i < rows_; ++i) {
         for (int j = 0; j < cols_; ++j) {
@@ -35,37 +35,37 @@ Matrix<T>::Matrix(std::initializer_list<T> const& items) {
 
 template <class T>
 Matrix<T>::Matrix(const std::string filename) {
-    initMatrix(filename);
+    InitFromFile(filename);
 }
 
 template <class T>
 Matrix<T>::Matrix(Matrix&& other)
-    : matrix_(other.matrix_), cols_(other.getColumn()), rows_(other.getRows()) {
+    : matrix_(other.matrix_), cols_(other.GetColumns()), rows_(other.GetRows()) {
     other.matrix_ = nullptr;
 }
 
 template <class T>
-bool Matrix<T>::isSquare() {
+bool Matrix<T>::IsSquare() {
     return rows_ == cols_;
 }
 
 template <class T>
 Matrix<T>::~Matrix() {
-    freeMatrix();
+    Destroy();
 }
 
 template <class T>
-int Matrix<T>::getRows() const {
+int Matrix<T>::GetRows() const {
     return rows_;
 }
 
 template <class T>
-int Matrix<T>::getColumn() const {
+int Matrix<T>::GetColumns() const {
     return cols_;
 }
 
 template <class T>
-void Matrix<T>::setRows(int rows) {
+void Matrix<T>::SetRows(int rows) {
     if (rows <= 0) throw std::out_of_range("Invalid values");
     Matrix tmp(rows, cols_);
     for (int i = 0; i < rows; i++) {
@@ -81,7 +81,7 @@ void Matrix<T>::setRows(int rows) {
 }
 
 template <class T>
-void Matrix<T>::setColumn(int columns) {
+void Matrix<T>::SetColumns(int columns) {
     if (columns <= 0) throw std::out_of_range("Invalid values");
     Matrix tmp(rows_, columns);
     for (int i = 0; i < rows_; i++) {
@@ -97,13 +97,13 @@ void Matrix<T>::setColumn(int columns) {
 }
 
 template <class T>
-void Matrix<T>::createMatrix() {
+void Matrix<T>::Allocate() {
     matrix_ = new T* [rows_] {};
     for (int i = 0; i < rows_; i++) matrix_[i] = new T[cols_]{};
 }
 
 template <class T>
-void Matrix<T>::freeMatrix() {
+void Matrix<T>::Destroy() {
     if (matrix_) {
         for (int i = 0; i < rows_; i++)
             if (matrix_[i]) delete[] matrix_[i];
@@ -116,9 +116,9 @@ void Matrix<T>::freeMatrix() {
 }
 
 template <class T>
-bool Matrix<T>::matrix_eq(const Matrix& other) {
-    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->validate() ||
-        !other.validate())
+bool Matrix<T>::IsEqualMatrix(const Matrix& other) {
+    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->IsValidate() ||
+        !other.IsValidate())
         return false;
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -130,9 +130,9 @@ bool Matrix<T>::matrix_eq(const Matrix& other) {
 }
 
 template <class T>
-void Matrix<T>::matrix_sum(const Matrix& other) {
-    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->validate() ||
-        !other.validate())
+void Matrix<T>::SumMatrix(const Matrix& other) {
+    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->IsValidate() ||
+        !other.IsValidate())
         throw std::out_of_range("Error ! Different dimensionality of matrices");
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -142,9 +142,9 @@ void Matrix<T>::matrix_sum(const Matrix& other) {
 }
 
 template <class T>
-void Matrix<T>::matrix_sub(const Matrix& other) {
-    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->validate() ||
-        !other.validate())
+void Matrix<T>::SubMatrix(const Matrix& other) {
+    if (cols_ != other.cols_ || rows_ != other.rows_ || !this->IsValidate() ||
+        !other.IsValidate())
         throw std::out_of_range("Error ! Different dimensionality of matrices");
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -154,7 +154,7 @@ void Matrix<T>::matrix_sub(const Matrix& other) {
 }
 
 template <class T>
-void Matrix<T>::mul_number(const double num) {
+void Matrix<T>::MulNumber(const double num) {
     if (std::isnan(num) || std::isinf(num))
         throw std::out_of_range("Incorrect values");
     for (int i = 0; i < rows_; i++) {
@@ -165,8 +165,8 @@ void Matrix<T>::mul_number(const double num) {
 }
 
 template <class T>
-void Matrix<T>::matrix_mul(const Matrix& other) {
-    if (this->rows_ != other.cols_ || !this->validate() || !other.validate())
+void Matrix<T>::MulMatrix(const Matrix& other) {
+    if (this->rows_ != other.cols_ || !this->IsValidate() || !other.IsValidate())
         throw std::out_of_range("Error ! Invalid values");
     Matrix tmp(rows_, other.cols_);
     for (int i = 0; i < rows_; i++) {
@@ -180,7 +180,7 @@ void Matrix<T>::matrix_mul(const Matrix& other) {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::transpose() {
+Matrix<T> Matrix<T>::Transpose() {
     Matrix result(cols_, rows_);
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -191,9 +191,9 @@ Matrix<T> Matrix<T>::transpose() {
 }
 
 template <class T>
-double Matrix<T>::determinant() {
+double Matrix<T>::Determinant() {
     double result = 0.0;
-    if (rows_ != cols_ || !this->validate())
+    if (rows_ != cols_ || !this->IsValidate())
         throw std::out_of_range("Error ! The matrix must not be square !");
     if (rows_ == 1) {
         result = matrix_[0][0];
@@ -202,8 +202,8 @@ double Matrix<T>::determinant() {
             (matrix_[1][1] * matrix_[0][0]) - (matrix_[1][0] * matrix_[0][1]);
     } else if (rows_ > 2) {
         for (int i = 0; i < rows_; i++) {
-            Matrix detA = cutMatrix(0, i);
-            result += std::pow(-1.0, i) * matrix_[0][i] * detA.determinant();
+            Matrix detA = CutMatrix(0, i);
+            result += std::pow(-1.0, i) * matrix_[0][i] * detA.Determinant();
         }
     }
 
@@ -211,7 +211,7 @@ double Matrix<T>::determinant() {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::cutMatrix(int rows, int columns) {
+Matrix<T> Matrix<T>::CutMatrix(int rows, int columns) {
     Matrix result(rows_ - 1, cols_ - 1);
     int rowsTmp = 0, columnsTmp = 0;
     for (int i = 0; i < rows_; i++) {
@@ -230,33 +230,33 @@ Matrix<T> Matrix<T>::cutMatrix(int rows, int columns) {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::calc_complements() {
+Matrix<T> Matrix<T>::CalcComplements() {
     Matrix result(rows_, cols_);
-    if (cols_ != rows_ || !this->validate())
+    if (cols_ != rows_ || !this->IsValidate())
         throw std::out_of_range("Error ! The matrix must not be square !");
     Matrix tmp;
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < rows_; j++) {
-            tmp = cutMatrix(i, j);
-            result.matrix_[i][j] = std::pow(-1, i + j) * tmp.determinant();
+            tmp = CutMatrix(i, j);
+            result.matrix_[i][j] = std::pow(-1, i + j) * tmp.Determinant();
         }
     }
     return result;
 }
 
 template <class T>
-Matrix<T> Matrix<T>::inversematrix_() {
-    double det = determinant();
-    if (cols_ != rows_ || std::isnan(det) || det == 0 || !this->validate())
-        throw std::out_of_range("Error ! The determinant of the matrix is 0");
+Matrix<T> Matrix<T>::InverseMatrix() {
+    double det = Determinant();
+    if (cols_ != rows_ || std::isnan(det) || det == 0 || !this->IsValidate())
+        throw std::out_of_range("Error ! The Determinant of the matrix is 0");
     Matrix result = Matrix(rows_, cols_);
     if (rows_ == 1) {
         result.matrix_[0][0] = 1 / det;
     } else {
-        Matrix complements = calc_complements();
-        Matrix transpose = complements.transpose();
-        transpose.mul_number(1 / det);
-        result = transpose;
+        Matrix complements = CalcComplements();
+        Matrix Transpose = complements.Transpose();
+        Transpose.MulNumber(1 / det);
+        result = Transpose;
     }
     return result;
 }
@@ -297,10 +297,10 @@ bool Matrix<T>::operator==(const Matrix<T>& other) {
 template <class T>
 Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
     if (this != &other) {
-        freeMatrix();
+        Destroy();
         rows_ = other.rows_;
         cols_ = other.cols_;
-        createMatrix();
+        Allocate();
     }
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -313,7 +313,7 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
 template <class T>
 Matrix<T>& Matrix<T>::operator=(Matrix<T>&& other) {
     if (this != &other) {
-        freeMatrix();
+        Destroy();
         rows_ = other.rows_;
         cols_ = other.cols_;
         matrix_ = other.matrix_;
@@ -343,7 +343,7 @@ Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
 
 template <class T>
 Matrix<T>& Matrix<T>::operator*=(const double number) {
-    mul_number(number);
+    MulNumber(number);
     return *this;
 }
 
@@ -351,7 +351,7 @@ template <class T>
 Matrix<T> operator*(const Matrix<T>& other, const double num) {
     if (std::isnan(num) || std::isinf(num))
         throw std::out_of_range("Incorrect values");
-    Matrix result(other.getRows(), other.getColumn());
+    Matrix result(other.GetRows(), other.GetColumns());
     result = other;
     result *= num;
     return result;
@@ -361,14 +361,14 @@ template <class T>
 Matrix<T> operator*(const double num, const Matrix<T>& other) {
     if (std::isnan(num) || std::isinf(num))
         throw std::out_of_range("Incorrect values");
-    Matrix result(other.getRows(), other.getColumn());
+    Matrix result(other.GetRows(), other.GetColumns());
     result = other;
     result *= num;
     return result;
 }
 
 template <class T>
-void Matrix<T>::initMatrix(std::string path) {
+void Matrix<T>::InitFromFile(std::string path) {
     std::ifstream file(path);
     if (!file) throw std::out_of_range("file error");
     for (int i = 0; i < rows_; i++) {
@@ -380,7 +380,7 @@ void Matrix<T>::initMatrix(std::string path) {
 }
 
 template <class T>
-bool Matrix<T>::validate() const {
+bool Matrix<T>::IsValidate() const {
     bool result = false;
     if (this->matrix_ != nullptr || this->rows_ > 0 || this->cols_ > 0) {
         result = true;
@@ -389,7 +389,7 @@ bool Matrix<T>::validate() const {
 }
 
 template <class T>
-void Matrix<T>::print() {
+void Matrix<T>::Print() {
     std::cout << std::endl;
     for (int i = 0; i < rows_; ++i) {
         for (int j = 0; j < cols_; ++j) std::cout << matrix_[i][j] << " ";

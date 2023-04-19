@@ -23,20 +23,20 @@ class Matrix {
 
     //  Methods
 
-    int getRows() const;
-    int getColumn() const;
-    void setRows(int rows);
-    void setColumn(int columns);
-    bool matrix_eq(const Matrix& other);
-    void matrix_sum(const Matrix& other);
-    void matrix_sub(const Matrix& other);
-    void mul_number(const double num);
-    void matrix_mul(const Matrix& other);
-    Matrix transpose();
-    Matrix calc_complements();
-    Matrix inversematrix_();
-    double determinant();
-    bool isSquare();
+    int GetRows() const;
+    int GetColumns() const;
+    void SetRows(int rows);
+    void SetColumns(int columns);
+    bool IsEqualMatrix(const Matrix& other);
+    void SumMatrix(const Matrix& other);
+    void SubMatrix(const Matrix& other);
+    void MulNumber(const double num);
+    void MulMatrix(const Matrix& other);
+    Matrix Transpose();
+    Matrix CalcComplements();
+    Matrix InverseMatrix();
+    double Determinant();
+    bool IsSquare();
 
     //  operators
 
@@ -53,18 +53,18 @@ class Matrix {
     bool operator==(const Matrix& other);
 
     // utilities
-    void initMatrix(std::string path);
-    void print();
+    void InitFromFile(std::string path);
+    void Print();
 
    private:
     // Attributes
     int rows_{}, cols_{};  // Rows and columns
     T** matrix_{};  // Pointer to the memory where the matrix is allocated
 
-    Matrix cutMatrix(int rows, int columns);
-    bool validate() const;
-    void createMatrix();
-    void freeMatrix();
+    Matrix CutMatrix(int rows, int columns);
+    bool IsValidate() const;
+    void Allocate();
+    void Destroy();
 };
 #include "matrix.inl"
 #endif  // MATRIX_H_
