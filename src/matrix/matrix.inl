@@ -385,11 +385,7 @@ void Matrix<T>::InitFromFile(std::string path) {
 
 template <class T>
 bool Matrix<T>::IsValidate() const {
-    bool result = false;
-    if (this->matrix_ != nullptr || this->rows_ > 0 || this->cols_ > 0) {
-        result = true;
-    }
-    return result;
+    return (this->matrix_ != nullptr || this->rows_ > 0 || this->cols_ > 0);
 }
 
 template <class T>
